@@ -1,75 +1,145 @@
+// components/RegistrarOcorrencia.jsx
+
+import React, { useState } from 'react';
+import axios from 'axios';
+
 const RegistrarOcorrencia = () => {
+  const [formData, setFormData] = useState({
+    categoria_id: '',
+    bloco: '',
+    sala: '',
+    descricao: '',
+    severidade: '',
+    foto: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Recuperar o token do localStorage
+      const token = localStorage.getItem('accessToken');
+  
+      if (!token) {
+        throw new Error('Token de acesso não encontrado. Por favor, faça login novamente.');
+      }
+  
+      const response = await axios.post(
+        'http://localhost:3000/ocorrencias',
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho
+          },
+        }
+      );
+  
+      console.log('Ocorrência registrada:', response.data);
+      // Limpar o formulário ou redirecionar o usuário
+    } catch (error) {
+      console.error('Erro ao registrar ocorrência:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="justify-center items-center flex flex-col mt-4 gap-2">
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <label className="flex flex-col">
             Categoria
             <select
-              name="categoria"
-              id="categoria"
+              name="categoria_id"
+              value={formData.categoria_id}
+              onChange={handleChange}
               className="w-60 h-14 border rounded-md shadow-lg "
-              
             >
-                <option value="" disabled selected>Selecione a categoria</option>
-              <option value="Limpeza">Limpeza</option>
-              <option value="Manutenção de equipamentos">
-                Manutenção de equipamentos
+              <option value="" disabled>
+                Selecione a categoria
               </option>
-              <option value="Problemas eletricos">Problemas elétricos</option>
-              <option value="Climatização">Climatização</option>
+              <option value="1">Limpeza</option>
+              <option value="2">Manutenção de equipamentos</option>
+              <option value="3">Problemas elétricos</option>
+              <option value="4">Climatização</option>
             </select>
           </label>
 
-          <div className="flex justify-between mt-36 ">
-            <label className="flex flex-col">
-              Bloco
-              <input
-                type="text"
-                className=" w-24 h-10 border rounded-md shadow-lg border-solid border-gray-800"
-              />
-            </label>
-            <label className="flex flex-col jus">
-              Sala
-              <input
-                type="text"
-                className="w-24 h-10 border rounded-md shadow-lg border-solid border-gray-800"
-              />
-            </label>
-          </div>
+          {/* Bloco */}
+          <label className="flex flex-col mt-4">
+            Bloco
+            <input
+              type="text"
+              name="bloco"
+              value={formData.bloco}
+              onChange={handleChange}
+              className="w-24 h-10 border rounded-md shadow-lg border-gray-800"
+            />
+          </label>
 
-          <div className="flex flex-col justify-center mt-6 gap-4">
-            <label className="flex flex-col">
-              Descrição
-              <input
-                type=""
-                className="w-60 h-10 border rounded-md shadow-lg border-solid border-gray-800"
-              />
-            </label>
+          {/* Sala */}
+          <label className="flex flex-col mt-4">
+            Sala
+            <input
+              type="text"
+              name="sala"
+              value={formData.sala}
+              onChange={handleChange}
+              className="w-24 h-10 border rounded-md shadow-lg border-gray-800"
+            />
+          </label>
 
-            <label className="flex flex-col mt-6">
-              Severidade
-              <select
-                name="severidade"
-                id="severidade"
-                className="w-60 h-14 border rounded-md shadow-lg "
-              >
-                <option value="" disabled selected>Selecione a severidade</option>
-                <option value="Alta">Alta</option>
-                <option value="Média">Média</option>
-                <option value="Baixa">Baixa</option>
-              </select>
-            </label>
+          {/* Descrição */}
+          <label className="flex flex-col mt-4">
+            Descrição
+            <input
+              type="text"
+              name="descricao"
+              value={formData.descricao}
+              onChange={handleChange}
+              className="w-60 h-10 border rounded-md shadow-lg border-gray-800"
+            />
+          </label>
 
-            <label className="flex flex-col mt-6 mb-10">
-              Foto
-              <input
-                type=""
-                className="w-60 h-10 border rounded-md shadow-lg border-solid border-gray-800"
-              />
-            </label>
-          </div>
-          <button className="p-2 w-full bg-azul-unifor rounded-xl text-white hover:bg-blue-900">Registrar Ocorrência</button>
+          {/* Severidade */}
+          <label className="flex flex-col mt-4">
+            Severidade
+            <select
+              name="severidade"
+              value={formData.severidade}
+              onChange={handleChange}
+              className="w-60 h-14 border rounded-md shadow-lg "
+            >
+              <option value="" disabled>
+                Selecione a severidade
+              </option>
+              <option value="Alta">Alta</option>
+              <option value="Média">Média</option>
+              <option value="Baixa">Baixa</option>
+            </select>
+          </label>
+
+          {/* Foto */}
+          <label className="flex flex-col mt-4 mb-6">
+            Foto
+            <input
+              type="text"
+              name="foto"
+              value={formData.foto}
+              onChange={handleChange}
+              className="w-60 h-10 border rounded-md shadow-lg border-gray-800"
+            />
+          </label>
+
+          <button
+            type="submit"
+            className="p-2 w-full bg-azul-unifor rounded-xl text-white hover:bg-blue-900"
+          >
+            Registrar Ocorrência
+          </button>
         </form>
       </div>
     </div>

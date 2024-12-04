@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import imagem from "../../assets/Clean Campus (3) 1.jpg";
 
-export const LoginUsuario = () => {
+export const LoginPrestador = () => {
     const [ra, setRa] = useState("");
     const [senha, setSenha] = useState("");
     const navigate = useNavigate();
@@ -11,14 +11,14 @@ export const LoginUsuario = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/clientes/login", {
+            const response = await axios.post("http://localhost:3000/prestadores/login", {
                 ra, // Envia o ra acadêmico
                 senha,
             });
             console.log("Login bem-sucedido:", response.data);
 
             // Redireciona para a página principal após o login
-            navigate("/usuario/home");
+            navigate("/prestador/home");
         } catch (error) {
             console.error("Erro ao fazer login:", error.response?.data?.message || error.message);
             alert("Erro ao fazer login. Verifique suas credenciais.");
@@ -71,8 +71,8 @@ export const LoginUsuario = () => {
                     </form>
                     <p>
                         Ainda não tem uma conta?{" "}
-                        <a className="text-azul-unifor" href="/usuario/cadastro">
-                            Cadastre-se
+                        <a className="text-azul-unifor" href="/prestador/cadastro">
+                            Solicite a sua conta
                         </a>
                     </p>
                 </div>
