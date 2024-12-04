@@ -41,7 +41,7 @@ export default function OcorrenciaItemPrestador({ ocorrencia }) {
             </div>
             <span className="font-semibold">Sala {sala}</span>
           </div>
-          <button className="bg-azul-unifor text-white px-3 py-1 rounded-lg">
+          <button className="bg-azul-unifor p-2 ml-4 text-white px-3 py-1 rounded-lg">
             Resolver ocorrência
           </button>
         </div>

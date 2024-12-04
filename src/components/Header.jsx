@@ -11,7 +11,7 @@ export default function Header() {
       </div>
 
       {/* Logo 2 Centralizada */}
-      <div className="flex-1 flex justify-center">
+      <div className="flex-1 flex justify-center mr-16">
         <img src={logo2} alt="Logo 2" className="h-12" /> {/* Aumentando a altura da logo 2 */}
       </div>
 

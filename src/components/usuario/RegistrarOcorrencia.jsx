@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import axios from 'axios';
+import Header from '../Header';
 
 const RegistrarOcorrencia = () => {
   const [formData, setFormData] = useState({
@@ -47,9 +48,10 @@ const RegistrarOcorrencia = () => {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="justify-center items-center flex flex-col mt-4 gap-2">
-        <form onSubmit={handleSubmit}>
+    <div className="flex flex-col bg-azul-unifor">
+      <Header/>
+      <div className="justify-center items-center flex flex-col mt-4 gap-2 bg-azul-unifor">
+        <form className='bg-white m-2 gap-2 p-6' onSubmit={handleSubmit}>
           <label className="flex flex-col">
             Categoria
             <select
@@ -123,20 +125,27 @@ const RegistrarOcorrencia = () => {
           </label>
 
           {/* Foto */}
-          <label className="flex flex-col mt-4 mb-6">
+          <label className="flex justify-center items-center flex-col mt-4 mb-6">
             Foto
             <input
-              type="text"
+              id='file-upload'
+              type="file"
               name="foto"
               value={formData.foto}
               onChange={handleChange}
-              className="w-60 h-10 border rounded-md shadow-lg border-gray-800"
+              className=" hidden w-60 h-10 border rounded-md shadow-lg border-gray-800"
             />
+          </label>
+          <label
+            htmlFor="file-upload"
+            className="flex mt-4 p-2 text-sm justify-center bg-azul-unifor text-white rounded-full cursor-pointer hover:opacity-90"
+          >
+            Enviar Foto
           </label>
 
           <button
             type="submit"
-            className="p-2 w-full bg-azul-unifor rounded-xl text-white hover:bg-blue-900"
+            className="p-2 w-full bg-azul-unifor rounded-xl text-white hover:bg-blue-900 mt-4"
           >
             Registrar Ocorrência
           </button>
