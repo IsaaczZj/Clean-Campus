@@ -11,7 +11,6 @@ const RegistrarOcorrencia = () => {
     sala: '',
     descricao: '',
     severidade: '',
-    foto: ''
   });
 
   const handleChange = (e) => {
@@ -24,41 +23,54 @@ const RegistrarOcorrencia = () => {
 
     try {
       // Recuperar o token do localStorage
-      const token = localStorage.getItem('accessToken');
-  
+      const token = localStorage.getItem('token');
+
       if (!token) {
         throw new Error('Token de acesso não encontrado. Por favor, faça login novamente.');
       }
-  
-      const response = await axios.post(
-        'http://localhost:3000/ocorrencias',
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho
-          },
-        }
-      );
-  
+
+      // Preparar os dados para envio
+      const data = new FormData();
+      data.append('categoria_id', formData.categoria_id);
+      data.append('bloco', formData.bloco);
+      data.append('sala', formData.sala);
+      data.append('descricao', formData.descricao);
+      data.append('severidade', formData.severidade);
+
+      const response = await axios.post('http://localhost:3000/ocorrencias', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho
+        },
+      });
+
       console.log('Ocorrência registrada:', response.data);
       // Limpar o formulário ou redirecionar o usuário
+      setFormData({
+        categoria_id: '',
+        bloco: '',
+        sala: '',
+        descricao: '',
+        severidade: '',
+      });
     } catch (error) {
       console.error('Erro ao registrar ocorrência:', error);
     }
   };
 
   return (
-    <div className="flex flex-col bg-azul-unifor">
-      <Header/>
+    <div className="flex flex-col min-h-screen bg-azul-unifor">
+      <Header />
       <div className="justify-center items-center flex flex-col mt-4 gap-2 bg-azul-unifor">
-        <form className='bg-white m-2 gap-2 p-6' onSubmit={handleSubmit}>
+        <form className="bg-white m-2 gap-2 p-6" onSubmit={handleSubmit}>
+          {/* Categoria */}
           <label className="flex flex-col">
             Categoria
             <select
               name="categoria_id"
               value={formData.categoria_id}
               onChange={handleChange}
-              className="w-60 h-14 border rounded-md shadow-lg "
+              className="w-60 h-14 border rounded-md shadow-lg"
             >
               <option value="" disabled>
                 Selecione a categoria
@@ -113,7 +125,7 @@ const RegistrarOcorrencia = () => {
               name="severidade"
               value={formData.severidade}
               onChange={handleChange}
-              className="w-60 h-14 border rounded-md shadow-lg "
+              className="w-60 h-14 border rounded-md shadow-lg"
             >
               <option value="" disabled>
                 Selecione a severidade
@@ -124,25 +136,7 @@ const RegistrarOcorrencia = () => {
             </select>
           </label>
 
-          {/* Foto */}
-          <label className="flex justify-center items-center flex-col mt-4 mb-6">
-            Foto
-            <input
-              id='file-upload'
-              type="file"
-              name="foto"
-              value={formData.foto}
-              onChange={handleChange}
-              className=" hidden w-60 h-10 border rounded-md shadow-lg border-gray-800"
-            />
-          </label>
-          <label
-            htmlFor="file-upload"
-            className="flex mt-4 p-2 text-sm justify-center bg-azul-unifor text-white rounded-full cursor-pointer hover:opacity-90"
-          >
-            Enviar Foto
-          </label>
-
+          {/* Botão de submissão */}
           <button
             type="submit"
             className="p-2 w-full bg-azul-unifor rounded-xl text-white hover:bg-blue-900 mt-4"
