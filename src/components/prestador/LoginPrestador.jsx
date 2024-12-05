@@ -11,14 +11,12 @@ export const LoginPrestador = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/prestadores/login", {
-                ra, // Envia o ra acadêmico
+            const { data: { acessToken } } = await axios.post("http://localhost:3000/clientes/login", {
+                ra,
                 senha,
-            });
-            console.log("Login bem-sucedido:", response.data);
-
-            // Redireciona para a página principal após o login
-            navigate("/prestador/home");
+              });    
+            localStorage.setItem("token", acessToken);
+            navigate("/usuario/home");
         } catch (error) {
             console.error("Erro ao fazer login:", error.response?.data?.message || error.message);
             alert("Erro ao fazer login. Verifique suas credenciais.");
