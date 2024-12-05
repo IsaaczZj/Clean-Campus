@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-export default function OcorrenciaItemPrestador({ ocorrencia, onExcluir }) {
+export default function OcorrenciaItemPrestador({ ocorrencia, onResolver }) {
   const { id, bloco, sala, descricao, severidade } = ocorrencia;
 
   // Mapeamento de severidade para cores
