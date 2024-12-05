@@ -53,7 +53,7 @@ export default function ListaOcorrenciasUsuario() {
             ocorrencia={ocorrencia}
             onExcluir={handleExcluirOcorrencia}
           />
-        ))
+        ))  
       ) : (
         <p>Não há ocorrências registradas.</p>
       )}
