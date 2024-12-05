@@ -11,12 +11,12 @@ export const LoginPrestador = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const { data: { acessToken } } = await axios.post("http://localhost:3000/clientes/login", {
+            const { data: { acessToken } } = await axios.post("http://localhost:3000/prestadores/login", {
                 ra,
                 senha,
               });    
             localStorage.setItem("token", acessToken);
-            navigate("/usuario/home");
+            navigate("/prestador/home");
         } catch (error) {
             console.error("Erro ao fazer login:", error.response?.data?.message || error.message);
             alert("Erro ao fazer login. Verifique suas credenciais.");
