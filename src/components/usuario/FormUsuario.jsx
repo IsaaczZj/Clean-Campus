@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import axios  from "axios"
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import imagem from '../../assets/Clean Campus (3) 1.jpg';
 
 export const FormUsuario = () => {
@@ -9,6 +10,8 @@ export const FormUsuario = () => {
     senha: ''
   });
   const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false); // Estado para verificar sucesso
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +21,15 @@ export const FormUsuario = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/clientes/cadastro', formData);
+      await axios.post('http://localhost:3000/clientes/cadastro', formData);
       setMessage('Cadastro realizado com sucesso!');
+      setIsSuccess(true); // Sinaliza sucesso no cadastro
+      setTimeout(() => {
+        navigate('/usuario/login'); // Redireciona após 2 segundos
+      }, 2000);
     } catch (error) {
       setMessage(error.response?.data?.message || 'Erro ao realizar cadastro');
+      setIsSuccess(false); // Reseta sinal de sucesso
     }
   };
 
@@ -50,7 +58,7 @@ export const FormUsuario = () => {
             </div>
             <div className="flex flex-col gap-2">
               <label className="font-semibold" htmlFor="ra">
-                Matricula
+                Matrícula
               </label>
               <input
                 className="outline-none border-2 border-azul-unifor rounded-lg p-2"
@@ -79,7 +87,15 @@ export const FormUsuario = () => {
               Cadastrar
             </button>
           </form>
-          {message && <p>{message}</p>}
+          {message && (
+            <div
+              className={`mt-4 p-2 rounded-lg text-center w-full ${
+                isSuccess ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+              }`}
+            >
+              {message}
+            </div>
+          )}
           <p>
             Já tem uma conta?{' '}
             <a className="text-azul-unifor" href="/login">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Header from '../Header';
+import { Navigate } from 'react-router-dom';
 
 const RegistrarOcorrencia = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const RegistrarOcorrencia = () => {
     descricao: '',
     severidade: '',
   });
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [redirect, setRedirect] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,13 +33,18 @@ const RegistrarOcorrencia = () => {
       // Enviar dados como JSON
       const response = await axios.post('http://localhost:3000/ocorrencias', formData, {
         headers: {
-          'Content-Type': 'application/json', // Mudança para JSON
-          Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
       });
 
       console.log('Ocorrência registrada:', response.data);
-      // Limpar o formulário ou redirecionar o usuário
+
+      // Mostrar mensagem de sucesso e limpar formulário
+      setSuccessMessage(
+        `Ocorrência registrada com sucesso!
+         Bloco: ${formData.bloco}, Sala: ${formData.sala}, Severidade: ${formData.severidade}`
+      );
       setFormData({
         categoria_id: '',
         bloco: '',
@@ -44,16 +52,24 @@ const RegistrarOcorrencia = () => {
         descricao: '',
         severidade: '',
       });
+
+      // Redirecionar após 2 segundos
+      setTimeout(() => setRedirect(true), 2000);
     } catch (error) {
       console.error('Erro ao registrar ocorrência:', error);
     }
   };
 
+  // Redirecionar para /clientes/home
+  if (redirect) {
+    return <Navigate to="/usuario/home" />;
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-azul-unifor">
       <Header />
       <div className="justify-center items-center flex flex-col mt-4 gap-2 bg-azul-unifor">
-        <form className="bg-white m-2 gap-2 p-6" onSubmit={handleSubmit}>
+        <form className="bg-white m-2 gap-2 p-10 mt-10 rounded-lg" onSubmit={handleSubmit}>
           {/* Categoria */}
           <label className="flex flex-col">
             Categoria
@@ -135,6 +151,13 @@ const RegistrarOcorrencia = () => {
             Registrar Ocorrência
           </button>
         </form>
+
+        {/* Mensagem de sucesso */}
+        {successMessage && (
+          <div className="mt-4 p-4 bg-green-200 text-green-700 rounded-lg shadow-md">
+            {successMessage}
+          </div>
+        )}
       </div>
     </div>
   );
