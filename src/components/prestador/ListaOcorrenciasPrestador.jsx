@@ -1,5 +1,5 @@
-// components/ListaOcorrenciasPrestador.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import OcorrenciaItemPrestador from './OcorrenciaItemPrestador';
 
 export default function ListaOcorrenciasPrestador() {
@@ -28,33 +28,28 @@ export default function ListaOcorrenciasPrestador() {
     }
   };
 
-  const handleResolverOcorrencia = (id) => {
-    setOcorrencias((prev) => prev.filter((ocorrencia) => ocorrencia.id !== id));
-  };
-
   useEffect(() => {
     fetchOcorrencias();
   }, []);
 
-  if (loading) return <div>Carregando ocorrências...</div>;
-  if (error) return <div>{error}</div>;
-
+  const handleResolverOcorrencia = (id) => {
+    setOcorrencias((prev) => prev.filter((ocorrencia) => ocorrencia.id !== id));
+  };
 
   return (
-    <div className="p-4">
-      <h2 className="text-center text-azul-unifor text-2xl font-semibold">
-        Ocorrências disponíveis
-      </h2>
-      {ocorrencias.length > 0 ? (
-        ocorrencias.map((ocorrencia) => (
-          <OcorrenciaItemPrestador
-            key={ocorrencia.id}
-            ocorrencia={ocorrencia}
-            onResolver={handleResolverOcorrencia}
-          />
-        ))
-      ) : (
-        <p>Não há ocorrências registradas.</p>
+    <div>
+      {loading && <p>Carregando...</p>}
+      {error && <p>{error}</p>}
+      {!loading && !error && (
+        <div>
+          {ocorrencias.map((ocorrencia) => (
+            <OcorrenciaItemPrestador
+              key={ocorrencia.id}
+              ocorrencia={ocorrencia}
+              onResolver={handleResolverOcorrencia}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

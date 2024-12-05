@@ -25,22 +25,21 @@ export default function OcorrenciaItemPrestador({ ocorrencia, onResolver }) {
     }
   };
 
-  // Função para excluir a ocorrência
+  // Função para resolver a ocorrência
   const resolverOcorrencia = async () => {
     try {
-      // Recuperando o token do localStorage ou onde estiver armazenado
-      const token = localStorage.getItem('token'); // Altere conforme sua implementação
+      // Recuperando o token do localStorage
+      const token = localStorage.getItem('token');
 
-      // Se não houver token, mostre um erro ou redirecione para login
       if (!token) {
         console.error("Token não encontrado. O usuário não está autenticado.");
         return;
       }
 
-      // Realizando a requisição de exclusão
-      await axios.post(`http://localhost:3000/ocorrencias/resolver/${id}`, {
+      // Realizando a requisição para resolver a ocorrência
+      await axios.post(`http://localhost:3000/ocorrencias/resolver/${id}`, null, {
         headers: {
-          Authorization: `Bearer ${token}`, // Enviando o token no cabeçalho
+          Authorization: `Bearer ${token}`,
         },
       });
 
