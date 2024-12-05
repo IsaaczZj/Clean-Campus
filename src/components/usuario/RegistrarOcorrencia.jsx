@@ -1,5 +1,3 @@
-// components/RegistrarOcorrencia.jsx
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import Header from '../Header';
@@ -29,17 +27,10 @@ const RegistrarOcorrencia = () => {
         throw new Error('Token de acesso não encontrado. Por favor, faça login novamente.');
       }
 
-      // Preparar os dados para envio
-      const data = new FormData();
-      data.append('categoria_id', formData.categoria_id);
-      data.append('bloco', formData.bloco);
-      data.append('sala', formData.sala);
-      data.append('descricao', formData.descricao);
-      data.append('severidade', formData.severidade);
-
-      const response = await axios.post('http://localhost:3000/ocorrencias', data, {
+      // Enviar dados como JSON
+      const response = await axios.post('http://localhost:3000/ocorrencias', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json', // Mudança para JSON
           Authorization: `Bearer ${token}`, // Adiciona o token ao cabeçalho
         },
       });
